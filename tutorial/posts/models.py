@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 def get_default_author():
-    user = User.objects.get_or_create(username='admin')[0]
+    user = User.objects.get_or_create(username='admin1')[0]
     return user.id
 
 class PostModel (models.Model):

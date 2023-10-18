@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from .permissions import IsGetRequest
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 class PostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
@@ -23,9 +24,19 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return [permission() for permission in permission_class]
         
-
+    @swagger_auto_schema(
+            operation_description='post creation',
+            responses={201:openapi.Response('Post created', PostSerializer)},
+            response_body=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'exempleTest':openapi.Schema(type=openapi.TYPE_STRING, description='exemple description')
+                }
+            )
+    )
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
+            print(request.user)
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
